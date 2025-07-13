@@ -106,8 +106,8 @@ export default function NameEntry({ onStart }: NameEntryProps) {
                   onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
                   className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
                   placeholder="Your mobile number..."
-                  pattern="[0-9]{10,15}"
-                  maxLength={15}
+                  pattern="[0-9]{10}"
+                  maxLength={10}
                   required
                 />
               </div>
@@ -115,6 +115,7 @@ export default function NameEntry({ onStart }: NameEntryProps) {
             <motion.button
               type="submit"
               disabled={!name.trim() || !mobile.trim() || mobile.length < 10}
+              disabled={!name.trim() || !mobile.trim() || mobile.length !== 10}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
@@ -123,7 +124,7 @@ export default function NameEntry({ onStart }: NameEntryProps) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 ${
-                name.trim() && mobile.trim() && mobile.length >= 10
+                name.trim() && mobile.trim() && mobile.length === 10
                   ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:shadow-purple-500/25'
                   : 'bg-gray-600 text-gray-400 cursor-not-allowed'
               }`}
