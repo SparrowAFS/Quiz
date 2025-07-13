@@ -11,6 +11,7 @@ type Screen = 'name' | 'quiz' | 'results' | 'loading'
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('name')
   const [participantName, setParticipantName] = useState('')
+  const [participantMobile, setParticipantMobile] = useState('')
   const [quizzes, setQuizzes] = useState<Quiz[]>([])
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [score, setScore] = useState(0)
@@ -50,7 +51,7 @@ function App() {
     }
   }
 
-  const handleStartQuiz = async (name: string) => {
+  const handleStartQuiz = async (name: string, mobile: string) => {
     // Check if user has already participated today
     if (checkDailyParticipation()) {
       setError('You have already participated in the quiz today. Please come back tomorrow!')
@@ -58,6 +59,7 @@ function App() {
     }
 
     setParticipantName(name)
+    setParticipantMobile(mobile)
     setCurrentScreen('loading')
     await fetchQuizzes()
     setCurrentScreen('quiz')
@@ -79,6 +81,7 @@ function App() {
     try {
       const participant: Participant = {
         name: participantName,
+        mobile_number: participantMobile,
         correct_count: correctCount
       }
 

@@ -1,19 +1,20 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { User, Sparkles } from 'lucide-react'
+import { User, Phone } from 'lucide-react'
 
 interface NameEntryProps {
-  onStart: (name: string) => void
+  onStart: (name: string, mobile: string) => void
 }
 
 export default function NameEntry({ onStart }: NameEntryProps) {
   const [name, setName] = useState('')
+  const [mobile, setMobile] = useState('')
   const [isHovered, setIsHovered] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (name.trim()) {
-      onStart(name.trim())
+    if (name.trim() && mobile.trim()) {
+      onStart(name.trim(), mobile.trim())
     }
   }
 
@@ -89,18 +90,40 @@ export default function NameEntry({ onStart }: NameEntryProps) {
               </div>
             </motion.div>
 
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <label className="block text-white font-medium mb-2">
+                Enter your mobile number
+              </label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-300 w-5 h-5" />
+                <input
+                  type="tel"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
+                  className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                  placeholder="Your mobile number..."
+                  pattern="[0-9]{10,15}"
+                  maxLength={15}
+                  required
+                />
+              </div>
+            </motion.div>
             <motion.button
               type="submit"
-              disabled={!name.trim()}
+              disabled={!name.trim() || !mobile.trim() || mobile.length < 10}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
+              transition={{ delay: 0.8 }}
               onHoverStart={() => setIsHovered(true)}
               onHoverEnd={() => setIsHovered(false)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 ${
-                name.trim()
+                name.trim() && mobile.trim() && mobile.length >= 10
                   ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:shadow-purple-500/25'
                   : 'bg-gray-600 text-gray-400 cursor-not-allowed'
               }`}
